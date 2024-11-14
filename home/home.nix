@@ -1,4 +1,4 @@
-{ config, pkgs, ... }:
+{ config, pkgs, ... }@inputs:
 
 {
   # Home Manager needs a bit of information about you and the paths it should
@@ -35,7 +35,6 @@
     # # overrides. You can do that directly here, just don't forget the
     # # parentheses. Maybe you want to install Nerd Fonts with a limited number of
     # # fonts?
-    # (pkgs.nerdfonts.override { fonts = [ "FantasqueSansMono" ]; })
     (nerdfonts.override { fonts = ["FiraCode" "Inconsolata"]; })
     fira-code
     noto-fonts
@@ -66,6 +65,8 @@
     # kdePackages.kamoso # Package is broken
     kdePackages.kweather
     # KDE Apps end
+
+    gparted
 
     gimp
     htop
@@ -112,7 +113,7 @@
   #  /etc/profiles/per-user/karl/etc/profile.d/hm-session-vars.sh
   #
   home.sessionVariables = {
-    EDITOR = "emacs";
+    EDITOR = "emacsclient -c";
   };
 
   home.shellAliases = {
@@ -120,7 +121,14 @@
     icat = "kitten icat";
   };
 
-  services.emacs.enable = true;
+  services.emacs = {
+    enable = true;
+    # Let emacs start after the Desktop Environment starts
+    startWithUserSession = "graphical";
+    # We don't set emacs as the default editor because I would
+    # want to use emacsclient instead.
+  };
+  
   services.syncthing = {
     enable = true;
     tray.enable = true;
@@ -196,4 +204,10 @@
 
   # Let Home Manager install and manage itself.
   programs.home-manager.enable = true;
+
+  services.gpg-agent = {
+    enable = true;
+    pinentryPackage = pkgs.pinentry-qt;
+  };
+
 }

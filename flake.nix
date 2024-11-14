@@ -6,6 +6,12 @@
         url = "github:nix-community/home-manager/release-24.05";
         inputs.nixpkgs.follows = "nixpkgs";
       };
+      
+      # Declaratively manage KDE Plasma 6
+      plasma-manager = {
+        url = "github:nix-community/plasma-manager/trunk";
+        inputs.nixpkgs.follows = "nixpkgs";
+      };
     };
 
   outputs = { self, nixpkgs, ... }@inputs:
@@ -14,7 +20,7 @@
       globals = rec {
         user = "karl";
         fullName = "Karl Frederick Roldan";
-        gitName = fullName;
+        gitName = "Karl Roldan";
         gitEmail = "karlfroldan@gmail.com";
       };
       system = "x86_64-linux";
@@ -26,7 +32,9 @@
       homeConfigurations = {
         karl = inputs.home-manager.lib.homeManagerConfiguration {
           pkgs = nixpkgs.legacyPackages.${system};
-          modules = [ ./home/home.nix ];
+          modules = [
+            ./home/home.nix
+          ];
         };
       };
     };
