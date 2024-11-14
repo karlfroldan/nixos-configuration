@@ -2,7 +2,7 @@
 
 with inputs;
 
-nixpkgs.lib.nixosSystem rec {
+nixpkgs.lib.nixosSystem {
   system = "x86_64-linux";
   modules = [
     ./configuration.nix
