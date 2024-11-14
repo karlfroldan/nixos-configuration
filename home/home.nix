@@ -200,6 +200,7 @@
     enable = true;
     userName = "karlfroldan";
     userEmail = "karlfroldan@gmail.com";
+    extraConfig.init.defaultBranch = "main";
   };
 
   # Let Home Manager install and manage itself.
