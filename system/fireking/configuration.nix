@@ -2,7 +2,7 @@
 # your system.  Help is available in the configuration.nix(5) man page
 # and in the NixOS manual (accessible by running ‘nixos-help’).
 
-{ config, pkgs, callPackage, ... }:
+{ config, pkgs, lib, callPackage, ... }:
 
 {
   imports =
@@ -195,5 +195,19 @@
   # this value at the release version of the first install of this system.
   # Before changing this value read the documentation for this option
   # (e.g. man configuration.nix or on https://nixos.org/nixos/options.html).
+
+  # Binary cache for Haskell.nix
+  nix.settings = {
+    trusted-public-keys = [
+      "hydra.iohk.io:f/Ea+s+dFdN+3Y/G+FDgSq+a5NEWhJGzdjvKNGv0/EQ="
+      "nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs="
+    ];
+    substituters = [
+      "https://cache.iog.io"
+      "https://nix-community.cachix.org"
+    ];
+  };
+
+  # DON'T CHANGE THIS AT ALL
   system.stateVersion = "24.05"; # Did you read the comment?
 }
