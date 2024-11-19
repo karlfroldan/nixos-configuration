@@ -14,19 +14,25 @@
         url = "github:nix-community/plasma-manager/trunk";
         inputs.nixpkgs.follows = "nixpkgs";
       };
+
+      # Nix language server protocol
+      nil = {
+        url = "github:oxalica/nil";
+        inputs.nixpkgs.follows = "nixpkgs";
+      };
     };
 
   outputs = { self, nixpkgs, ... }@inputs:
     let
       # Global Configuration about everything
-      globals = rec {
+      globals = {
         user = "karl";
         fullName = "Karl Frederick Roldan";
         gitName = "Karl Roldan";
         gitEmail = "karlfroldan@gmail.com";
       };
       system = "x86_64-linux";
-    in rec {
+    in {
       nixosConfigurations = {
         fireking = import ./system/fireking/fireking.nix { inherit inputs globals; };
       };
@@ -37,6 +43,10 @@
           modules = [
             ./home/home.nix
           ];
+          extraSpecialArgs = let
+            nil = inputs.nil;
+          in
+            { inherit nil; };
         };
       };
     };

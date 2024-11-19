@@ -17,18 +17,24 @@
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
 
-  networking.hostName = "fireking"; # Define your hostname.
-  # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
+  # Networking configuration
+  networking = {
+    hostName = "fireking";
+    # wireless.enable = true;  # Enables wireless support via wpa_supplicant.
+    # Configure network proxy if necessary
+    
+    # proxy.default = "http://user:password@proxy:port/";
+    # proxy.noProxy = "127.0.0.1,localhost,internal.domain";
 
-  # Configure network proxy if necessarye
-  # networking.proxy.default = "http://user:password@proxy:port/";
-  # networking.proxy.noProxy = "127.0.0.1,localhost,internal.domain";
+    # Enable networking
+    networkmanager.enable = true;
 
-  # Enable networking
-  networking.networkmanager.enable = true;
+    # Extra hosts
+    hosts = import ./hosts.nix;
 
-  # Extra hosts
-  networking.hosts = import ./hosts.nix;
+    # Enable firewall
+    firewall.enable = true;
+  };
 
   # Set your time zone.
   time.timeZone = "Asia/Manila";
@@ -48,8 +54,40 @@
     LC_TIME = "en_PH.UTF-8";
   };
 
-  # Enable flatpaks
-  services.flatpak.enable = true;
+  # List of services
+  services = {
+    # Enable flatpak for all users
+    flatpak.enable = true;
+
+    # Enable the X11 windowing system
+    xserver.enable = true;
+
+    # Enable the KDE desktop environment
+    displayManager.sddm.wayland.enable = true;
+    desktopManager.plasma6.enable = true;
+
+    # Configure keymap in X11
+    xserver.xkb = {
+      layout = "ph";
+      variant = "";
+    };
+
+    # Enable CUPS to print documents
+    printing.enable = true;
+
+    # Pipewire
+    pipewire = {
+      enable = true;
+      alsa.enable = true;
+      alsa.support32Bit = true;
+      pulse.enable = true;
+    };
+
+    # Enable touchpad support
+    # xserver.libinput.enable = true;
+  };
+
+  # Set flatpak repository
   systemd.services.flatpak-repo = {
     wantedBy = [ "multi-user.target" ];
     path = [ pkgs.flatpak ];
@@ -75,49 +113,15 @@
     };
   };
 
-  # Enable the X11 windowing system.
-  services.xserver.enable = true;
-
-  # Enable the GNOME Desktop Environment.
-  services.xserver.displayManager.gdm.enable = false;
-  services.xserver.desktopManager.gnome.enable = false;
-
-  # Enable the KDE Desktop Environment
-  services.displayManager.sddm.wayland.enable = true;
-  services.desktopManager.plasma6.enable = true;
-
+  # Exclude packages from KDE installation
   environment.plasma6.excludePackages = with pkgs.kdePackages; [
     konsole
     kate
   ];
 
-  # Configure keymap in X11
-  services.xserver.xkb = {
-    layout = "ph";
-    variant = "";
-  };
-
-  # Enable CUPS to print documents.
-  services.printing.enable = true;
-
-  # Enable sound with pipewire.
+  # Extra pipewire settings
   hardware.pulseaudio.enable = false;
   security.rtkit.enable = true;
-  services.pipewire = {
-    enable = true;
-    alsa.enable = true;
-    alsa.support32Bit = true;
-    pulse.enable = true;
-    # If you want to use JACK applications, uncomment this
-    #jack.enable = true;
-
-    # use the example session manager (no others are packaged yet so this is enabled by default,
-    # no need to redefine it in your config for now)
-    #media-session.enable = true;
-  };
-
-  # Enable touchpad support (enabled default in most desktopManager).
-  # services.xserver.libinput.enable = true;
 
   # Define a user account. Don't forget to set a password with ‘passwd’.
   users.users.karl = {

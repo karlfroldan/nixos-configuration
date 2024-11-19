@@ -1,4 +1,9 @@
-{ config, pkgs, ... }@inputs:
+{
+  config,
+  pkgs,
+  nil,
+  ...
+}@inputs:
 
 {
   # Home Manager needs a bit of information about you and the paths it should
@@ -42,7 +47,7 @@
     noto-fonts-cjk-serif
     noto-fonts-emoji
 
-    etBook # font used for org-mode
+    libertine # Font I use for org-mode
 
     texlive.combined.scheme-medium
     # # You can also create simple shell scripts directly inside your
@@ -64,6 +69,9 @@
     # KDE Apps start
     # kdePackages.kamoso # Package is broken
     kdePackages.kweather
+    kdePackages.kmail
+    kdePackages.kmail-account-wizard
+    kdePackages.kmailtransport
     # KDE Apps end
 
     gparted
@@ -76,9 +84,16 @@
     minicom
     zotero
 
+    # Encryption and Security
+    bitwarden-desktop
+    age
+
     # ADD-ONS
     libreoffice
     celestia
+
+    # Language Servers
+    nil.packages.${system}.default # Language Server for the Nix language
   ];
 
   # Home Manager is pretty good at managing dotfiles. The primary way to manage
