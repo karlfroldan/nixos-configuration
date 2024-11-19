@@ -31,70 +31,77 @@
 
   # The home.packages option allows you to install Nix packages into your
   # environment.
-  home.packages = with pkgs; [
-    # # Adds the 'hello' command to your environment. It prints a friendly
-    # # "Hello, world!" when run.
-    # pkgs.hello
+  home.packages =
+    let
+      kdeApps = with pkgs.kdePackages; [
+        kweather
+        kmail
+        kmail-account-wizard
+        kmailtransport
+        kontact
+        kcalc
+        kdenlive
+      ];
 
-    # # It is sometimes useful to fine-tune packages, for example, by applying
-    # # overrides. You can do that directly here, just don't forget the
-    # # parentheses. Maybe you want to install Nerd Fonts with a limited number of
-    # # fonts?
-    (nerdfonts.override { fonts = ["FiraCode" "Inconsolata"]; })
-    fira-code
-    noto-fonts
-    noto-fonts-cjk-sans
-    noto-fonts-cjk-serif
-    noto-fonts-emoji
+      securityApps = with pkgs; [
+        bitwarden-desktop
+        bitwarden-cli
+        age
+        minisign
+      ];
 
-    libertine # Font I use for org-mode
+      languageUtils = with pkgs; [
+        # Nix language server
+        nil.packages.${system}.default
+        # Nix language formatter (invoke with nixfmt)
+        nixfmt-rfc-style
+      ];
 
-    texlive.combined.scheme-medium
-    # # You can also create simple shell scripts directly inside your
-    # # configuration. For example, this adds a command 'my-hello' to your
-    # # environment:
-    # (pkgs.writeShellScriptBin "my-hello" ''
-    #   echo "Hello, ${config.home.username}!"
-    # '')
+      guiApps = with pkgs; [
+        bottles # For windows emulation
+        gnome.gnome-boxes # For WINE
+        vlc
+        gimp
+        zotero
+        libreoffice
+        celestia
+      ];
 
-    # Emacs utility functions
-    (writeShellScriptBin "emacs-restart" ''
-      systemctl --user restart emacs.service
-    '')
+      commonCliApps =
+        let
+          emacsRestartScript = (pkgs.writeShellScriptBin "emacs-restart" ''
+        systemctl --user restart emacs.service
+        '');
+        in
+          with pkgs; [
+            aria2 # For downloading files
+            htop  # System view
+            unzip
+            ripgrep
+            bat
+            minicom
 
-    # Wine emulator
-    bottles
-    gnome.gnome-boxes
+            emacsRestartScript
+            texlive.combined.scheme-medium
+          ];
+      fonts = with pkgs; [
+        (nerdfonts.override { fonts = ["FiraCode" "Inconsolata"]; })
+        fira-code
+        noto-fonts
+        noto-fonts-cjk-sans
+        noto-fonts-cjk-serif
+        noto-fonts-emoji
 
-    # KDE Apps start
-    # kdePackages.kamoso # Package is broken
-    kdePackages.kweather
-    kdePackages.kmail
-    kdePackages.kmail-account-wizard
-    kdePackages.kmailtransport
-    # KDE Apps end
-
-    gparted
-
-    gimp
-    htop
-    unzip
-    ripgrep
-    bat
-    minicom
-    zotero
-
-    # Encryption and Security
-    bitwarden-desktop
-    age
-
-    # ADD-ONS
-    libreoffice
-    celestia
-
-    # Language Servers
-    nil.packages.${system}.default # Language Server for the Nix language
-  ];
+        emacs-all-the-icons-fonts
+        libertine # For org-mode
+      ];
+    in
+      kdeApps ++
+      securityApps ++
+      commonCliApps ++
+      languageUtils ++
+      guiApps ++
+      fonts;
 
   # Home Manager is pretty good at managing dotfiles. The primary way to manage
   # plain files is through 'home.file'.
@@ -185,14 +192,16 @@
       rich-minority
       annotate
       cdlatex
-      haskell-mode
-      yaml-mode
-      cmake-mode
-      rust-mode
       yasnippet
 
+      # LSP mode
+      flycheck
+      lsp-ui
+      company     # Completion popusps
+      helm-lsp    # type completion alternative
+      dap-mode    # debugger
+
       ggtags
-      company
       frog-jump-buffer
       maxima
       magit
@@ -205,9 +214,14 @@
       org-roam-ui
       org-roam-bibtex
 
+      # Programming languages
       jinja2-mode
       protobuf-mode
       yang-mode
+      haskell-mode
+      yaml-mode
+      cmake-mode
+      rust-mode
     ];
   };
 
