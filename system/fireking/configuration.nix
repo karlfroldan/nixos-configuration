@@ -121,7 +121,11 @@
 
   # Extra pipewire settings
   hardware.pulseaudio.enable = false;
+  hardware.bluetooth.enable = true;
+  
+
   security.rtkit.enable = true;
+  
 
   # Define a user account. Don't forget to set a password with ‘passwd’.
   users.users.karl = {
@@ -138,15 +142,15 @@
     ];
   };
 
-  programs.firefox = {
-    enable = true;
-    package = pkgs.wrapFirefox (pkgs.firefox-unwrapped.override {
-      pipewireSupport = true;
-    }) {};
-    preferences = {
-      "widget.use-xdg-desktop-portal.file-picker" = 1;
-    };
-  };
+  # programs.firefox = {
+  #   enable = true;
+  #   package = pkgs.wrapFirefox (pkgs.firefox-unwrapped.override {
+  #     pipewireSupport = true;
+  #   }) {};
+  #   preferences = {
+  #     "widget.use-xdg-desktop-portal.file-picker" = 1;
+  #   };
+  # };
 
   programs.dconf.enable = true;
 
@@ -157,8 +161,6 @@
   # $ nix search wget
   environment.systemPackages = with pkgs; [
     #  vim # Do not forget to add an editor to edit configuration.nix! The Nano editor is also installed by default.
-    kitty
-
     man-pages
     man-pages-posix
   ];

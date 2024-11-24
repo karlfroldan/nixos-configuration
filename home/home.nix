@@ -29,6 +29,12 @@
   # release notes.
   home.stateVersion = "24.05"; # Please read the comment before changing.
 
+  # Variables that are always set at login
+  home.sessionVariables = {
+    # Set electron and chrome apps to always use native wayland support
+    NIXOS_OZONE_WL = "1";
+  };
+
   # The home.packages option allows you to install Nix packages into your
   # environment.
   home.packages =
@@ -40,7 +46,6 @@
         kmailtransport
         kontact
         kcalc
-        kdenlive
       ];
 
       securityApps = with pkgs; [
@@ -59,12 +64,13 @@
 
       guiApps = with pkgs; [
         bottles # For windows emulation
-        gnome.gnome-boxes # For WINE
         vlc
         gimp
         zotero
         libreoffice
         celestia
+        virt-manager
+        kitty
       ];
 
       commonCliApps =
@@ -161,6 +167,17 @@
 
   programs.bash.enable = true;
 
+  programs.chromium = {
+    enable = true;
+    package = pkgs.brave;
+    extensions = [
+      # AdGuard
+      { id = "bgnkhhnnamicmpeenaelnjfhikgbkllg"; }
+      # Bitwarden
+      { id = "nngceckbapebfimnlniiiahkandclblb"; }
+    ];
+  };
+
   programs.emacs = {
     enable = true;
     package = pkgs.emacs-gtk;
@@ -222,6 +239,7 @@
       yaml-mode
       cmake-mode
       rust-mode
+      dockerfile-mode
     ];
   };
 
