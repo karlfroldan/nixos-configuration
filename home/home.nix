@@ -207,7 +207,6 @@
         tree-sitter-haskell
       ]))
 
-      catppuccin-theme
       nix-mode
       eat
       modus-themes
