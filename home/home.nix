@@ -39,15 +39,6 @@
   # environment.
   home.packages =
     let
-      kdeApps = with pkgs.kdePackages; [
-        kweather
-        kmail
-        kmail-account-wizard
-        kmailtransport
-        kontact
-        kcalc
-      ];
-
       securityApps = with pkgs; [
         bitwarden-desktop
         bitwarden-cli
@@ -63,6 +54,7 @@
       ];
 
       guiApps = with pkgs; [
+        gnome-online-accounts
         bottles # For windows emulation
         vlc
         gimp
@@ -71,6 +63,7 @@
         celestia
         virt-manager
         kitty
+        thunderbird
       ];
 
       commonCliApps =
@@ -90,6 +83,13 @@
             emacsRestartScript
             texlive.combined.scheme-medium
           ];
+
+      gnomeApps = with pkgs; [
+        gnome.dconf-editor
+        # Image viewer
+        loupe
+      ];
+      
       fonts = with pkgs; [
         (nerdfonts.override { fonts = ["FiraCode" "Inconsolata"]; })
         fira-code
@@ -98,11 +98,23 @@
         noto-fonts-cjk-serif
         noto-fonts-emoji
 
+        roboto
+        roboto-serif
+        roboto-mono
+
         emacs-all-the-icons-fonts
         libertine # For org-mode
       ];
+
+      gnomeShellExtensions = with pkgs.gnomeExtensions; [
+        ideapad
+        dash-to-panel
+        blur-my-shell
+        arcmenu
+      ];
     in
-      kdeApps ++
+      gnomeApps ++
+      gnomeShellExtensions ++
       securityApps ++
       commonCliApps ++
       languageUtils ++
@@ -194,7 +206,8 @@
         tree-sitter-toml
         tree-sitter-haskell
       ]))
-      
+
+      catppuccin-theme
       nix-mode
       eat
       modus-themes
@@ -241,6 +254,66 @@
       rust-mode
       dockerfile-mode
     ];
+  };
+
+  dconf = {
+    enable = true;
+    settings =
+      let
+        lib = inputs.lib;
+      in {
+        "org/gnome/shell" = {
+          
+          disable-user-extensions = false;
+          enabled-extensions = with pkgs.gnomeExtensions; [
+            # Put UUIDs of extensions that you want to enable here.
+            # If the extension you want to enable is packaged in nixpkgs,
+            # you can easily get its UUID by accessing its extensionUuid
+            # field (look at the following example).
+            ideapad.extensionUuid
+            dash-to-panel.extensionUuid
+            blur-my-shell.extensionUuid
+            arcmenu.extensionUuid
+          ];
+        };
+
+        # Configure individual extensions
+        "org/gnome/shell/extensions/blur-my-shell" = {
+          brightness = 0.75;
+          noise-amount = 0;
+        };
+
+        "org/gnome/shell/extensions/dash-to-panel" = {
+          dot-position = "BOTTOM";
+          dot-style-focused = "DASHES";
+          dot-style-unfocused = "DOTS";
+          hotkeys-overlay-combo = "TEMPORARILY";
+          leftbox-padding = -1;
+          window-preview-title-positions = "TOP";
+        };
+
+        "org/gnome/shell/extensions/arcmenu" = {
+          activate-on-hover = true;
+          custom-menu-button-icon-size = 30;
+          distro-icon = 22;
+
+          # Use Raven as my menu layout
+          menu-layout = "Raven";
+          raven-position = "Left";
+          raven-search-display-style = "List";
+
+          # Show world clocks when opening arcmenu
+          enable-clock-widget-raven = true;
+          enable-weather-widget-raven = true;
+
+          menu-arrow-rise = lib.hm.gvariant.mkTuple [false 6];
+
+          # Use NixOS Icon for the button
+          menu-button-appearance = "Icon";
+          menu-button-icon = "Distro_Icon";
+        };
+      };
+
   };
 
   programs.git = {

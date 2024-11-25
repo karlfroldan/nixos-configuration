@@ -8,12 +8,6 @@
         url = "github:nix-community/home-manager/release-24.05";
         inputs.nixpkgs.follows = "nixpkgs";
       };
-      
-      # Declaratively manage KDE Plasma 6
-      plasma-manager = {
-        url = "github:nix-community/plasma-manager/trunk";
-        inputs.nixpkgs.follows = "nixpkgs";
-      };
 
       # Nix language server protocol
       nil = {

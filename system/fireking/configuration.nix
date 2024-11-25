@@ -59,18 +59,19 @@
     # Enable flatpak for all users
     flatpak.enable = true;
 
-    # Enable the X11 windowing system
-    xserver.enable = true;
+    # Enable Gnome desktop
+    xserver = {
+      enable = true;
+      displayManager.gdm.enable = true;
+      desktopManager.gnome.enable = true;
 
-    # Enable the KDE desktop environment
-    displayManager.sddm.wayland.enable = true;
-    desktopManager.plasma6.enable = true;
-
-    # Configure keymap in X11
-    xserver.xkb = {
-      layout = "ph";
-      variant = "";
+      # Configure keymap
+      xkb = {
+        layout = "ph";
+        variant = "";
+      };
     };
+
 
     # Enable CUPS to print documents
     printing.enable = true;
@@ -113,10 +114,22 @@
     };
   };
 
-  # Exclude packages from KDE installation
-  environment.plasma6.excludePackages = with pkgs.kdePackages; [
-    konsole
-    kate
+  # Exclude gnome packages
+  environment.gnome.excludePackages = with pkgs; [
+    orca
+    evince
+    gnome.file-roller
+    gnome.geary
+    gnome.gnome-disk-utility
+
+    gnome-tour
+    gnome-user-docs
+    baobab
+    epiphany
+    gnome-text-editor
+    gnome-console
+    gnome.gnome-software
+    yelp
   ];
 
   # Extra pipewire settings
@@ -152,7 +165,7 @@
   #   };
   # };
 
-  programs.dconf.enable = true;
+  # programs.dconf.enable = true;
 
   # Allow unfree packages
   nixpkgs.config.allowUnfree = true;
@@ -164,17 +177,6 @@
     man-pages
     man-pages-posix
   ];
-
-  # Enable XDG Desktop Integration
-  xdg = {
-    portal = {
-      enable = true;
-      extraPortals = with pkgs; [
-        xdg-desktop-portal-wlr
-        xdg-desktop-portal-gtk
-      ];
-    };
-  };
 
   # Some programs need SUID wrappers, can be configured further or are
   # started in user sessions.
