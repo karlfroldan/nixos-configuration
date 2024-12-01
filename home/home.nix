@@ -180,15 +180,15 @@
 
   programs.bash.enable = true;
 
-  programs.chromium = {
+  programs.firefox = {
     enable = true;
-    package = pkgs.brave;
-    extensions = [
-      # AdGuard
-      { id = "bgnkhhnnamicmpeenaelnjfhikgbkllg"; }
-      # Bitwarden
-      { id = "nngceckbapebfimnlniiiahkandclblb"; }
+    nativeMessagingHosts = [
+      pkgs.gnome-browser-connector
     ];
+
+    policies = {
+      PasswordManagerEnabled = false;
+    };
   };
 
   programs.emacs = {
