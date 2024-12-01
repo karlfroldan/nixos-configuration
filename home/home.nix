@@ -54,16 +54,14 @@
       ];
 
       guiApps = with pkgs; [
-        gnome-online-accounts
-        bottles # For windows emulation
-        vlc
         gimp
         zotero
         libreoffice
-        celestia
-        virt-manager
         kitty
         thunderbird
+        wireshark
+        winetricks
+        wineWowPackages.staging
       ];
 
       commonCliApps =
@@ -86,14 +84,17 @@
 
       gnomeApps = with pkgs; [
         gnome.dconf-editor
-        # Image viewer
-        loupe
+        gnome.gnome-boxes    # For virtual machine
+
+        gnome-online-accounts
+        bottles              # For windows emulation
+        loupe                # Image viewer
       ];
       
       fonts = with pkgs; [
         (nerdfonts.override { fonts = ["FiraCode" "Inconsolata"]; })
         fira-code
-        noto-fonts
+        # noto-fonts
         noto-fonts-cjk-sans
         noto-fonts-cjk-serif
         noto-fonts-emoji
