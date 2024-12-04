@@ -193,7 +193,7 @@
 
   programs.emacs = {
     enable = true;
-    package = pkgs.emacs-gtk;
+    package = pkgs.emacs30-gtk3;
     extraPackages = epkgs: with epkgs; [
       # Tree-sitter modules
       (treesit-grammars.with-grammars (grammars :with grammars; [

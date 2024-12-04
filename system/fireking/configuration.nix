@@ -33,7 +33,17 @@
     hosts = import ./hosts.nix;
 
     # Enable firewall
-    firewall.enable = true;
+    firewall = {
+      enable = true;
+      allowedTCPPorts = [ 20 21 ];
+
+      # Allow FTP PASSIVE Port range
+      allowedTCPPortRanges = [
+        { from = 56250; to = 56260; }
+      ];
+
+      connectionTrackingModules = [ "ftp" ];
+    };
   };
 
   # Set your time zone.
@@ -86,6 +96,25 @@
 
     # Enable touchpad support
     # xserver.libinput.enable = true;
+
+    # FTP Server
+    vsftpd = {
+      enable = true;
+
+      anonymousUser = true;
+      anonymousUploadEnable = false;
+      anonymousUserHome = "/tmp/ftp";
+      anonymousUserNoPassword = true;
+      chrootlocalUser = true;
+
+      localUsers = true;
+      userlistEnable = true;
+      userlist = [ "karl" ];
+      writeEnable = false;
+      allowWriteableChroot = false;
+
+      extraConfig = "pasv_min_port=56250\npasv_max_port=56260";
+    };
   };
 
   # Set flatpak repository
