@@ -83,8 +83,8 @@
           ];
 
       gnomeApps = with pkgs; [
-        gnome.dconf-editor
-        gnome.gnome-boxes    # For virtual machine
+        dconf-editor
+        gnome-boxes    # For virtual machine
 
         gnome-online-accounts
         bottles              # For windows emulation

@@ -147,9 +147,9 @@
   environment.gnome.excludePackages = with pkgs; [
     orca
     evince
-    gnome.file-roller
-    gnome.geary
-    gnome.gnome-disk-utility
+    file-roller
+    geary
+    gnome-disk-utility
 
     gnome-tour
     gnome-user-docs
@@ -157,7 +157,7 @@
     epiphany
     gnome-text-editor
     gnome-console
-    gnome.gnome-software
+    gnome-software
     yelp
   ];
 
