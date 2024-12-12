@@ -253,6 +253,7 @@
       cmake-mode
       rust-mode
       dockerfile-mode
+      pest-mode
     ];
   };
 
