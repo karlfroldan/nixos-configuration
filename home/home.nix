@@ -59,7 +59,6 @@
         libreoffice
         kitty
         thunderbird
-        wireshark
         winetricks
         wineWowPackages.staging
       ];
@@ -223,6 +222,7 @@
       annotate
       cdlatex
       yasnippet
+      deft
 
       # LSP mode
       flycheck

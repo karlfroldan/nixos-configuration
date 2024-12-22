@@ -32,10 +32,22 @@
     # Extra hosts
     hosts = import ./hosts.nix;
 
+    # services.openssh = {
+    #   enable = true;
+    #   ports = [ 22 ];
+    #   settings = {
+    #     PasswordAuthentication = true;
+    #     AllowUsers  = [ "karl" ];
+    #     X11Forwarding = false;
+    #     PermitRootLogin = "prohibit-password";
+    #   };
+    # };
+
     # Enable firewall
     firewall = {
       enable = true;
-      allowedTCPPorts = [ 20 21 ];
+      allowedTCPPorts = [ 20 21 22 ];
+      allowedUDPPorts = [ 67 ];
 
       # Allow FTP PASSIVE Port range
       allowedTCPPortRanges = [
@@ -126,22 +138,34 @@
       '';
   };
 
-  # Enable virtual machines
-  virtualisation.libvirtd = {
-    enable = true;
-    qemu = {
-      package = pkgs.qemu_kvm;
-      runAsRoot = true;
-      swtpm.enable = true;
-      ovmf = {
-        enable = true;
-        packages = [(pkgs.OVMF.override {
-          secureBoot = true;
-          tpmSupport = true;
-        }).fd];
-      };
-    };
-  };
+  # virtualisation = {
+  #   containers.enable = true;
+
+  #   podman = {
+  #     enable = true;
+  #     # Let containers be able to talk with each other
+  #     defaultNetwork.settings.dns_enabled = true;
+  #   };
+
+  #   # Enable virtual machines
+  #   libvirtd = {
+  #     enable = true;
+  #     qemu = {
+  #       package = pkgs.qemu_kvm;
+  #       runAsRoot = true;
+  #       swtpm.enable = true;
+  #       ovmf = {
+  #         enable = true;
+  #         packages = [(pkgs.OVMF.override {
+  #           secureBoot = true;
+  #           tpmSupport = true;
+  #         }).fd];
+  #       };
+  #     };
+  #   };
+  # };
+
+  
 
   # Exclude gnome packages
   environment.gnome.excludePackages = with pkgs; [
@@ -175,26 +199,15 @@
     description = "Karl Frederick Roldan";
     extraGroups = [
       "networkmanager"
+      "wireshark"
       # Allow sudo access
       "wheel"
       # Allow spawning virtual machines
-      "libvirtd"
+      # "libvirtd"
       # Allow access to serial interfaces
       "dialout"
     ];
   };
-
-  # programs.firefox = {
-  #   enable = true;
-  #   package = pkgs.wrapFirefox (pkgs.firefox-unwrapped.override {
-  #     pipewireSupport = true;
-  #   }) {};
-  #   preferences = {
-  #     "widget.use-xdg-desktop-portal.file-picker" = 1;
-  #   };
-  # };
-
-  # programs.dconf.enable = true;
 
   # Allow unfree packages
   nixpkgs.config.allowUnfree = true;
@@ -205,6 +218,11 @@
     #  vim # Do not forget to add an editor to edit configuration.nix! The Nano editor is also installed by default.
     man-pages
     man-pages-posix
+    wireshark
+
+    # Unfortunately, I have to use PPTP :(
+    pptp
+    ppp
   ];
 
   # Some programs need SUID wrappers, can be configured further or are
@@ -218,7 +236,7 @@
   # List services that you want to enable:
 
   # Enable the OpenSSH daemon.
-  # services.openssh.enable = true;
+  services.openssh.enable = true;
 
   # Open ports in the firewall.
   # networking.firewall.allowedTCPPorts = [ ... ];
