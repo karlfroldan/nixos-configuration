@@ -2,7 +2,7 @@
 # your system.  Help is available in the configuration.nix(5) man page
 # and in the NixOS manual (accessible by running ‘nixos-help’).
 
-{ config, pkgs, lib, callPackage, ... }:
+{ pkgs, firekingpkgs, ... }@attrs:
 
 {
   imports =
@@ -27,7 +27,12 @@
     # proxy.noProxy = "127.0.0.1,localhost,internal.domain";
 
     # Enable networking
-    networkmanager.enable = true;
+    networkmanager = {
+      enable = true;
+      plugins = [
+        firekingpkgs.packages."x86_64-linux".networkmanager-pptp
+      ];
+    };
 
     # Extra hosts
     hosts = import ./hosts.nix;
@@ -46,7 +51,8 @@
     # Enable firewall
     firewall = {
       enable = true;
-      allowedTCPPorts = [ 20 21 22 ];
+      # Port 1723 used by PPTP
+      allowedTCPPorts = [ 20 21 22 1723];
       allowedUDPPorts = [ 67 ];
 
       # Allow FTP PASSIVE Port range
@@ -88,10 +94,9 @@
       desktopManager.gnome.enable = true;
 
       # Configure keymap
-      xkb = {
-        layout = "ph";
-        variant = "";
-      };
+      xkb.layout = "ph";
+      xkb.variant = "";
+      
     };
 
 
@@ -138,32 +143,24 @@
       '';
   };
 
-  # virtualisation = {
-  #   containers.enable = true;
-
-  #   podman = {
-  #     enable = true;
-  #     # Let containers be able to talk with each other
-  #     defaultNetwork.settings.dns_enabled = true;
-  #   };
-
-  #   # Enable virtual machines
-  #   libvirtd = {
-  #     enable = true;
-  #     qemu = {
-  #       package = pkgs.qemu_kvm;
-  #       runAsRoot = true;
-  #       swtpm.enable = true;
-  #       ovmf = {
-  #         enable = true;
-  #         packages = [(pkgs.OVMF.override {
-  #           secureBoot = true;
-  #           tpmSupport = true;
-  #         }).fd];
-  #       };
-  #     };
-  #   };
-  # };
+  virtualisation = {
+    # Enable virtual machines
+    libvirtd = {
+      enable = true;
+      qemu = {
+        package = pkgs.qemu_kvm;
+        runAsRoot = true;
+        swtpm.enable = true;
+        ovmf = {
+          enable = true;
+          packages = [(pkgs.OVMF.override {
+            secureBoot = true;
+            tpmSupport = true;
+          }).fd];
+        };
+      };
+    };
+  };
 
   
 
@@ -203,7 +200,7 @@
       # Allow sudo access
       "wheel"
       # Allow spawning virtual machines
-      # "libvirtd"
+      "libvirtd"
       # Allow access to serial interfaces
       "dialout"
     ];

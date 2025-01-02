@@ -1,11 +1,19 @@
-{ inputs, globals, ... } :
+{ inputs, globals, firekingpkgs, ... } :
 
 with inputs;
 
 nixpkgs.lib.nixosSystem {
   system = "x86_64-linux";
   modules = [
-    ./configuration.nix
-    ({ config, pkgs, options, ...} : { nix.registry.nixpkgs.flake = nixpkgs; })
+    ({ config, pkgs, options, ...} :
+      let
+        configurationModule = import ./configuration.nix {
+          inherit pkgs firekingpkgs;
+        };
+      in {
+        nix.registry.nixpkgs.flake = nixpkgs;
+        imports = [ configurationModule ];
+      }
+    )
   ];
 }

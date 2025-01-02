@@ -1,5 +1,24 @@
 {
   "nodes": {
+    "firekingpkgs": {
+      "inputs": {
+        "nixpkgs": "nixpkgs"
+      },
+      "locked": {
+        "lastModified": 1734923873,
+        "narHash": "sha256-fMneKxGRKk6Fs5c3+dwq/WIMknccLVsZciE6w6IfM3k=",
+        "owner": "karlfroldan",
+        "repo": "nixos-fireking",
+        "rev": "39f9dbeee71b8974f2f0a0f42d2472e3fd1bda9b",
+        "type": "github"
+      },
+      "original": {
+        "owner": "karlfroldan",
+        "ref": "main",
+        "repo": "nixos-fireking",
+        "type": "github"
+      }
+    },
     "flake-utils": {
       "inputs": {
         "systems": "systems"
@@ -25,11 +44,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1734366194,
-        "narHash": "sha256-vykpJ1xsdkv0j8WOVXrRFHUAdp9NXHpxdnn1F4pYgSw=",
+        "lastModified": 1735344290,
+        "narHash": "sha256-oJDtWPH1oJT34RJK1FSWjwX4qcGOBRkcNQPD0EbSfNM=",
         "owner": "nix-community",
         "repo": "home-manager",
-        "rev": "80b0fdf483c5d1cb75aaad909bd390d48673857f",
+        "rev": "613691f285dad87694c2ba1c9e6298d04736292d",
         "type": "github"
       },
       "original": {
@@ -71,6 +90,21 @@
         "type": "github"
       },
       "original": {
+        "id": "nixpkgs",
+        "ref": "nixos-24.11",
+        "type": "indirect"
+      }
+    },
+    "nixpkgs_2": {
+      "locked": {
+        "lastModified": 1735669367,
+        "narHash": "sha256-tfYRbFhMOnYaM4ippqqid3BaLOXoFNdImrfBfCp4zn0=",
+        "owner": "NixOS",
+        "repo": "nixpkgs",
+        "rev": "edf04b75c13c2ac0e54df5ec5c543e300f76f1c9",
+        "type": "github"
+      },
+      "original": {
         "owner": "NixOS",
         "ref": "nixos-24.11",
         "repo": "nixpkgs",
@@ -79,9 +113,10 @@
     },
     "root": {
       "inputs": {
+        "firekingpkgs": "firekingpkgs",
         "home-manager": "home-manager",
         "nil": "nil",
-        "nixpkgs": "nixpkgs"
+        "nixpkgs": "nixpkgs_2"
       }
     },
     "rust-overlay": {

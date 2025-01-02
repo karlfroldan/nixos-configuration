@@ -54,6 +54,8 @@
       ];
 
       guiApps = with pkgs; [
+        virt-manager
+
         gimp
         zotero
         libreoffice
@@ -77,13 +79,14 @@
             bat
             minicom
 
+            sshfs
+
             emacsRestartScript
             texlive.combined.scheme-medium
           ];
 
       gnomeApps = with pkgs; [
         dconf-editor
-        gnome-boxes    # For virtual machine
 
         gnome-online-accounts
         bottles              # For windows emulation
