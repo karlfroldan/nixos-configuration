@@ -160,6 +160,11 @@
         };
       };
     };
+
+    docker = {
+      enable = true;
+      storageDriver = "btrfs";
+    };
   };
 
   
@@ -195,6 +200,8 @@
     isNormalUser = true;
     description = "Karl Frederick Roldan";
     extraGroups = [
+      "docker"
+
       "networkmanager"
       "wireshark"
       # Allow sudo access
@@ -212,7 +219,10 @@
   # List packages installed in system profile. To search, run:
   # $ nix search wget
   environment.systemPackages = with pkgs; [
-    #  vim # Do not forget to add an editor to edit configuration.nix! The Nano editor is also installed by default.
+    dive # look into docker image layers
+    # podman-tui # status of containers
+    docker-compose
+
     man-pages
     man-pages-posix
     wireshark

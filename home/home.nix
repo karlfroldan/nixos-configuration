@@ -79,6 +79,11 @@
             bat
             minicom
 
+            python3
+            git-review
+            quilt
+            clang-tools
+
             sshfs
 
             emacsRestartScript
@@ -257,6 +262,7 @@
       rust-mode
       dockerfile-mode
       pest-mode
+      typescript-mode
     ];
   };
 
