@@ -13,9 +13,13 @@
   # Enable swapping
   swapDevices = [ { device = "/mnt/swap/swapfile"; } ];
 
-  # Bootloader.
-  boot.loader.systemd-boot.enable = true;
-  boot.loader.efi.canTouchEfiVariables = true;
+  boot = {
+    # Bootloader.
+    loader = {
+      systemd-boot.enable = true;
+      efi.canTouchEfiVariables = true;
+    };
+  };
 
   # Networking configuration
   networking = {
@@ -29,38 +33,23 @@
     # Enable networking
     networkmanager = {
       enable = true;
-      plugins = [
-        firekingpkgs.packages."x86_64-linux".networkmanager-pptp
-      ];
     };
 
     # Extra hosts
     hosts = import ./hosts.nix;
 
-    # services.openssh = {
-    #   enable = true;
-    #   ports = [ 22 ];
-    #   settings = {
-    #     PasswordAuthentication = true;
-    #     AllowUsers  = [ "karl" ];
-    #     X11Forwarding = false;
-    #     PermitRootLogin = "prohibit-password";
-    #   };
-    # };
-
     # Enable firewall
     firewall = {
       enable = true;
       # Port 1723 used by PPTP
-      allowedTCPPorts = [ 20 21 22 1723];
-      allowedUDPPorts = [ 67 ];
+      # allowedTCPPorts = [ 20 21 22 1723];
+      allowedTCPPorts = [ 22 ];
+      allowedUDPPorts = [ 67 13231 ];
 
       # Allow FTP PASSIVE Port range
-      allowedTCPPortRanges = [
-        { from = 56250; to = 56260; }
-      ];
-
-      connectionTrackingModules = [ "ftp" ];
+      # allowedTCPPortRanges = [
+      #   { from = 56250; to = 56260; }
+      # ];
     };
   };
 

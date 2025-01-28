@@ -29,12 +29,6 @@
   # release notes.
   home.stateVersion = "24.05"; # Please read the comment before changing.
 
-  # Variables that are always set at login
-  home.sessionVariables = {
-    # Set electron and chrome apps to always use native wayland support
-    NIXOS_OZONE_WL = "1";
-  };
-
   # The home.packages option allows you to install Nix packages into your
   # environment.
   home.packages =
@@ -44,6 +38,7 @@
         bitwarden-cli
         age
         minisign
+        wireguard-tools
       ];
 
       languageUtils = with pkgs; [
@@ -59,10 +54,12 @@
         gimp
         zotero
         libreoffice
-        kitty
+        ghostty
         thunderbird
         winetricks
         wineWowPackages.staging
+
+        qgis
       ];
 
       commonCliApps =
@@ -75,16 +72,18 @@
             aria2 # For downloading files
             htop  # System view
             unzip
-            ripgrep
             bat
             minicom
+
+            pptp
+            ppp
 
             python3
             git-review
             quilt
             clang-tools
 
-            sshfs
+            global
 
             emacsRestartScript
             texlive.combined.scheme-medium
@@ -120,6 +119,14 @@
         blur-my-shell
         arcmenu
       ];
+
+      modernUnix = with pkgs; [
+        fd       # find alternative
+        ripgrep  # grep alternative
+        jq       # sed for json
+        sd       # sed alternative
+        doggo    # cmd line DNS
+      ];
     in
       gnomeApps ++
       gnomeShellExtensions ++
@@ -127,6 +134,7 @@
       commonCliApps ++
       languageUtils ++
       guiApps ++
+      modernUnix ++ 
       fonts;
 
   # Home Manager is pretty good at managing dotfiles. The primary way to manage
@@ -160,13 +168,18 @@
   #
   #  /etc/profiles/per-user/karl/etc/profile.d/hm-session-vars.sh
   #
-  home.sessionVariables = {
-    EDITOR = "emacsclient -c";
-  };
+  home = {
+    sessionVariables = {
+      # Set electron and chrome apps to always use native wayland support
+      NIXOS_OZONE_WL = "1";
 
-  home.shellAliases = {
-    s = "kitten ssh";
-    icat = "kitten icat";
+      EDITOR = "emacsclient -c";
+    };
+
+    shellAliases = {
+      # Run eshell scripts.
+      esh = "emacsclient -q -nw -e";
+    };
   };
 
   services.emacs = {
@@ -213,6 +226,11 @@
         tree-sitter-rust
         tree-sitter-toml
         tree-sitter-haskell
+        tree-sitter-typescript
+        tree-sitter-tsx
+        tree-sitter-javascript
+        tree-sitter-cmake
+        tree-sitter-elisp
       ]))
 
       nix-mode
@@ -223,7 +241,9 @@
       smart-mode-line
       auctex
       which-key
+      circe
       rg
+      age # File encryption
       projectile
       mu4e
       rich-minority
