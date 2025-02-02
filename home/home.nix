@@ -56,8 +56,6 @@
         libreoffice
         ghostty
         thunderbird
-        winetricks
-        wineWowPackages.staging
 
         qgis
       ];
@@ -93,7 +91,6 @@
         dconf-editor
 
         gnome-online-accounts
-        bottles              # For windows emulation
         loupe                # Image viewer
       ];
       
@@ -140,6 +137,11 @@
   # Home Manager is pretty good at managing dotfiles. The primary way to manage
   # plain files is through 'home.file'.
   home.file = {
+    # bat (modern-cat) config file
+    ".config/bat/config".text = ''
+      --theme="Coldark-Cold"
+      --italic-text=always
+    '';
     # # Building this configuration will create a copy of 'dotfiles/screenrc' in
     # # the Nix store. Activating the configuration will then make '~/.screenrc' a
     # # symlink to the Nix store copy.
@@ -173,7 +175,7 @@
       # Set electron and chrome apps to always use native wayland support
       NIXOS_OZONE_WL = "1";
 
-      EDITOR = "emacsclient -c";
+      EDITOR = "emacsclient -c -nw";
     };
 
     shellAliases = {
