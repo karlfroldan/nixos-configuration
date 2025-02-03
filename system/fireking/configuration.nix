@@ -150,9 +150,10 @@
       };
     };
 
-    docker = {
+    podman = {
       enable = true;
-      storageDriver = "btrfs";
+      # Allow containers to talk to each other
+      defaultNetwork.settings.dns_enabled = true;
     };
   };
 
@@ -189,8 +190,6 @@
     isNormalUser = true;
     description = "Karl Frederick Roldan";
     extraGroups = [
-      "docker"
-
       "networkmanager"
       "wireshark"
       # Allow sudo access
@@ -209,8 +208,8 @@
   # $ nix search wget
   environment.systemPackages = with pkgs; [
     dive # look into docker image layers
-    # podman-tui # status of containers
-    docker-compose
+    podman-tui # status of containers
+    podman-compose
 
     man-pages
     man-pages-posix
