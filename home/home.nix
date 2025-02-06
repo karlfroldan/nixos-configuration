@@ -285,6 +285,7 @@
       dockerfile-mode
       pest-mode
       typescript-mode
+      slint-mode
     ];
   };
 

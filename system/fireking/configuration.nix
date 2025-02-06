@@ -24,7 +24,7 @@
   # Networking configuration
   networking = {
     hostName = "fireking";
-    # wireless.enable = true;  # Enables wireless support via wpa_supplicant.
+
     # Configure network proxy if necessary
     
     # proxy.default = "http://user:password@proxy:port/";
@@ -41,15 +41,8 @@
     # Enable firewall
     firewall = {
       enable = true;
-      # Port 1723 used by PPTP
-      # allowedTCPPorts = [ 20 21 22 1723];
       allowedTCPPorts = [ 22 ];
       allowedUDPPorts = [ 67 13231 ];
-
-      # Allow FTP PASSIVE Port range
-      # allowedTCPPortRanges = [
-      #   { from = 56250; to = 56260; }
-      # ];
     };
   };
 
@@ -150,10 +143,9 @@
       };
     };
 
-    podman = {
+    docker = {
       enable = true;
-      # Allow containers to talk to each other
-      defaultNetwork.settings.dns_enabled = true;
+      storageDriver = "btrfs";
     };
   };
 
@@ -180,7 +172,6 @@
   # Extra pipewire settings
   hardware.pulseaudio.enable = false;
   hardware.bluetooth.enable = true;
-  
 
   security.rtkit.enable = true;
   
@@ -190,6 +181,7 @@
     isNormalUser = true;
     description = "Karl Frederick Roldan";
     extraGroups = [
+      "docker"
       "networkmanager"
       "wireshark"
       # Allow sudo access
@@ -208,16 +200,11 @@
   # $ nix search wget
   environment.systemPackages = with pkgs; [
     dive # look into docker image layers
-    podman-tui # status of containers
-    podman-compose
+    docker-compose
 
     man-pages
     man-pages-posix
     wireshark
-
-    # Unfortunately, I have to use PPTP :(
-    pptp
-    ppp
   ];
 
   # Some programs need SUID wrappers, can be configured further or are
@@ -232,12 +219,6 @@
 
   # Enable the OpenSSH daemon.
   services.openssh.enable = true;
-
-  # Open ports in the firewall.
-  # networking.firewall.allowedTCPPorts = [ ... ];
-  # networking.firewall.allowedUDPPorts = [ ... ];
-  # Or disable the firewall altogether.
-  # networking.firewall.enable = false;
 
   # This value determines the NixOS release from which the default
   # settings for stateful data, like file locations and database versions
