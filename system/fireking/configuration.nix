@@ -26,7 +26,7 @@
     hostName = "fireking";
 
     # Configure network proxy if necessary
-    
+
     # proxy.default = "http://user:password@proxy:port/";
     # proxy.noProxy = "127.0.0.1,localhost,internal.domain";
 
@@ -78,7 +78,7 @@
       # Configure keymap
       xkb.layout = "ph";
       xkb.variant = "";
-      
+
     };
 
 
@@ -149,7 +149,7 @@
     };
   };
 
-  
+
 
   # Exclude gnome packages
   environment.gnome.excludePackages = with pkgs; [
@@ -174,7 +174,6 @@
   hardware.bluetooth.enable = true;
 
   security.rtkit.enable = true;
-  
 
   # Define a user account. Don't forget to set a password with ‘passwd’.
   users.users.karl = {
@@ -205,6 +204,8 @@
     man-pages
     man-pages-posix
     wireshark
+
+    qemu
   ];
 
   # Some programs need SUID wrappers, can be configured further or are
