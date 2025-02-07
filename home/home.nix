@@ -62,40 +62,48 @@
 
       commonCliApps =
         let
-          emacsRestartScript = (pkgs.writeShellScriptBin "emacs-restart" ''
-        systemctl --user restart emacs.service
-        '');
+          emacsRestartScript = (
+            pkgs.writeShellScriptBin "emacs-restart" ''
+              systemctl --user restart emacs.service
+            ''
+          );
         in
-          with pkgs; [
-            aria2 # For downloading files
-            htop  # System view
-            unzip
-            bat
-            minicom
+        with pkgs;
+        [
+          aria2 # For downloading files
+          htop # System view
+          unzip
+          bat
+          minicom
 
-            pptp
-            ppp
+          pptp
+          ppp
 
-            python3
-            git-review
-            quilt
-            clang-tools
+          python3
+          git-review
+          quilt
+          clang-tools
 
-            global
+          global
 
-            emacsRestartScript
-            texlive.combined.scheme-medium
-          ];
+          emacsRestartScript
+          texlive.combined.scheme-medium
+        ];
 
       gnomeApps = with pkgs; [
         dconf-editor
 
         gnome-online-accounts
-        loupe                # Image viewer
+        loupe # Image viewer
       ];
-      
+
       fonts = with pkgs; [
-        (nerdfonts.override { fonts = ["FiraCode" "Inconsolata"]; })
+        (nerdfonts.override {
+          fonts = [
+            "FiraCode"
+            "Inconsolata"
+          ];
+        })
         fira-code
         # noto-fonts
         noto-fonts-cjk-sans
@@ -118,21 +126,21 @@
       ];
 
       modernUnix = with pkgs; [
-        fd       # find alternative
-        ripgrep  # grep alternative
-        jq       # sed for json
-        sd       # sed alternative
-        doggo    # cmd line DNS
+        fd # find alternative
+        ripgrep # grep alternative
+        jq # sed for json
+        sd # sed alternative
+        doggo # cmd line DNS
       ];
     in
-      gnomeApps ++
-      gnomeShellExtensions ++
-      securityApps ++
-      commonCliApps ++
-      languageUtils ++
-      guiApps ++
-      modernUnix ++ 
-      fonts;
+    gnomeApps
+    ++ gnomeShellExtensions
+    ++ securityApps
+    ++ commonCliApps
+    ++ languageUtils
+    ++ guiApps
+    ++ modernUnix
+    ++ fonts;
 
   # Home Manager is pretty good at managing dotfiles. The primary way to manage
   # plain files is through 'home.file'.
@@ -191,7 +199,7 @@
     # We don't set emacs as the default editor because I would
     # want to use emacsclient instead.
   };
-  
+
   services.syncthing = {
     enable = true;
     tray.enable = true;
@@ -216,77 +224,80 @@
   programs.emacs = {
     enable = true;
     package = pkgs.emacs30-gtk3;
-    extraPackages = epkgs: with epkgs; [
-      # Tree-sitter modules
-      (treesit-grammars.with-grammars (grammars :with grammars; [
-        tree-sitter-bash
-        tree-sitter-latex
-        tree-sitter-nix
-        tree-sitter-rust
-        tree-sitter-c
-        tree-sitter-cpp
-        tree-sitter-rust
-        tree-sitter-toml
-        tree-sitter-haskell
-        tree-sitter-typescript
-        tree-sitter-tsx
-        tree-sitter-javascript
-        tree-sitter-cmake
-        tree-sitter-elisp
-      ]))
+    extraPackages =
+      epkgs: with epkgs; [
+        # Tree-sitter modules
+        (treesit-grammars.with-grammars (
+          grammars: with grammars; [
+            tree-sitter-bash
+            tree-sitter-latex
+            tree-sitter-nix
+            tree-sitter-rust
+            tree-sitter-c
+            tree-sitter-cpp
+            tree-sitter-rust
+            tree-sitter-toml
+            tree-sitter-haskell
+            tree-sitter-typescript
+            tree-sitter-tsx
+            tree-sitter-javascript
+            tree-sitter-cmake
+            tree-sitter-elisp
+          ]
+        ))
 
-      nix-mode
-      eat
-      modus-themes
-      all-the-icons
-      all-the-icons-dired
-      smart-mode-line
-      auctex
-      which-key
-      circe
-      rg
-      age # File encryption
-      projectile
-      mu4e
-      rich-minority
-      annotate
-      cdlatex
-      yasnippet
-      deft
+        nix-mode
+        eat
+        modus-themes
+        all-the-icons
+        all-the-icons-dired
+        smart-mode-line
+        auctex
+        which-key
+        circe
+        rg
+        age # File encryption
+        projectile
+        mu4e
+        rich-minority
+        annotate
+        cdlatex
+        yasnippet
+        deft
 
-      # LSP mode
-      flycheck
-      lsp-ui
-      company     # Completion popusps
-      helm-lsp    # type completion alternative
-      dap-mode    # debugger
+        # LSP mode
+        flycheck
+        lsp-ui
+        company # Completion popusps
+        helm-lsp # type completion alternative
+        dap-mode # debugger
 
-      ggtags
-      frog-jump-buffer
-      maxima
-      magit
-      ace-window
-      windresize
+        ggtags
+        frog-jump-buffer
+        maxima
+        magit
+        ace-window
+        windresize
 
-      buffer-env
+        buffer-env
 
-      org-roam
-      org-roam-ui
-      org-roam-bibtex
+        org-roam
+        org-roam-ui
+        org-roam-bibtex
 
-      # Programming languages
-      jinja2-mode
-      protobuf-mode
-      yang-mode
-      haskell-mode
-      yaml-mode
-      cmake-mode
-      rust-mode
-      dockerfile-mode
-      pest-mode
-      typescript-mode
-      slint-mode
-    ];
+        # Programming languages
+        jinja2-mode
+        protobuf-mode
+        yang-mode
+        haskell-mode
+        yaml-mode
+        cmake-mode
+        rust-mode
+        dockerfile-mode
+        pest-mode
+        typescript-mode
+        slint-mode
+      ];
   };
 
   dconf = {
@@ -294,9 +305,10 @@
     settings =
       let
         lib = inputs.lib;
-      in {
+      in
+      {
         "org/gnome/shell" = {
-          
+
           disable-user-extensions = false;
           enabled-extensions = with pkgs.gnomeExtensions; [
             # Put UUIDs of extensions that you want to enable here.
@@ -339,7 +351,10 @@
           enable-clock-widget-raven = true;
           enable-weather-widget-raven = true;
 
-          menu-arrow-rise = lib.hm.gvariant.mkTuple [false 6];
+          menu-arrow-rise = lib.hm.gvariant.mkTuple [
+            false
+            6
+          ];
 
           # Use NixOS Icon for the button
           menu-button-appearance = "Icon";

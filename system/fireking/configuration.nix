@@ -5,10 +5,10 @@
 { pkgs, firekingpkgs, ... }@attrs:
 
 {
-  imports =
-    [ # Include the results of the hardware scan.
-      ./hardware-configuration.nix
-    ];
+  imports = [
+    # Include the results of the hardware scan.
+    ./hardware-configuration.nix
+  ];
 
   # Enable swapping
   swapDevices = [ { device = "/mnt/swap/swapfile"; } ];
@@ -42,7 +42,10 @@
     firewall = {
       enable = true;
       allowedTCPPorts = [ 22 ];
-      allowedUDPPorts = [ 67 13231 ];
+      allowedUDPPorts = [
+        67
+        13231
+      ];
     };
   };
 
@@ -80,7 +83,6 @@
       xkb.variant = "";
 
     };
-
 
     # Enable CUPS to print documents
     printing.enable = true;
@@ -122,7 +124,7 @@
     path = [ pkgs.flatpak ];
     script = ''
       flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
-      '';
+    '';
   };
 
   virtualisation = {
@@ -135,10 +137,12 @@
         swtpm.enable = true;
         ovmf = {
           enable = true;
-          packages = [(pkgs.OVMF.override {
-            secureBoot = true;
-            tpmSupport = true;
-          }).fd];
+          packages = [
+            (pkgs.OVMF.override {
+              secureBoot = true;
+              tpmSupport = true;
+            }).fd
+          ];
         };
       };
     };
@@ -148,8 +152,6 @@
       storageDriver = "btrfs";
     };
   };
-
-
 
   # Exclude gnome packages
   environment.gnome.excludePackages = with pkgs; [

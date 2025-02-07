@@ -1,26 +1,26 @@
 {
   description = "Nix system configuration";
-  
-  inputs =
-    {
-      nixpkgs.url = "github:NixOS/nixpkgs/nixos-24.11";
-      home-manager = {
-        url = "github:nix-community/home-manager/release-24.11";
-        inputs.nixpkgs.follows = "nixpkgs";
-      };
 
-      # Personal Nix packages
-      firekingpkgs.url = "github:karlfroldan/nixos-fireking/main";
-      # firekingpkgs.url = "git@github.com:karlfroldan/nixos-fireking.git";
-
-      # Nix language server protocol
-      nil = {
-        url = "github:oxalica/nil";
-        inputs.nixpkgs.follows = "nixpkgs";
-      };
+  inputs = {
+    nixpkgs.url = "github:NixOS/nixpkgs/nixos-24.11";
+    home-manager = {
+      url = "github:nix-community/home-manager/release-24.11";
+      inputs.nixpkgs.follows = "nixpkgs";
     };
 
-  outputs = { self, nixpkgs, ... }@inputs:
+    # Personal Nix packages
+    firekingpkgs.url = "github:karlfroldan/nixos-fireking/main";
+    # firekingpkgs.url = "git@github.com:karlfroldan/nixos-fireking.git";
+
+    # Nix language server protocol
+    nil = {
+      url = "github:oxalica/nil";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+  };
+
+  outputs =
+    { self, nixpkgs, ... }@inputs:
     let
       # Global Configuration about everything
       globals = {
@@ -31,7 +31,8 @@
       };
       system = "x86_64-linux";
       firekingpkgs = inputs.firekingpkgs;
-    in {
+    in
+    {
       nixosConfigurations = {
         fireking = import ./system/fireking/fireking.nix {
           inherit inputs globals firekingpkgs;
@@ -44,12 +45,14 @@
           modules = [
             ./home/home.nix
           ];
-          extraSpecialArgs = let
-            nil = inputs.nil;
-          in
-            { inherit nil; };
+          extraSpecialArgs =
+            let
+              nil = inputs.nil;
+            in
+            {
+              inherit nil;
+            };
         };
       };
     };
 }
-  
