@@ -76,15 +76,19 @@
           bat
           minicom
 
+          distrobox
+
           pptp
           ppp
 
           python3
+          virtualenv
           git-review
           quilt
           clang-tools
 
           global
+          lftp
 
           emacsRestartScript
           texlive.combined.scheme-medium
@@ -95,6 +99,7 @@
 
         gnome-online-accounts
         loupe # Image viewer
+        bottles # Wine launcher
       ];
 
       fonts = with pkgs; [
@@ -126,11 +131,11 @@
       ];
 
       modernUnix = with pkgs; [
-        fd # find alternative
-        ripgrep # grep alternative
-        jq # sed for json
-        sd # sed alternative
-        doggo # cmd line DNS
+        fd        # find alternative
+        ripgrep   # grep alternative
+        jq        # sed for json
+        sd        # sed alternative
+        doggo     # cmd line DNS
       ];
     in
     gnomeApps
@@ -208,7 +213,10 @@
     ];
   };
 
-  programs.bash.enable = true;
+  programs.bash = {
+    enable = true;
+  };
+  # programs.bash.enable = true;
 
   programs.firefox = {
     enable = true;
@@ -297,6 +305,7 @@
         pest-mode
         typescript-mode
         slint-mode
+        cypher-mode
       ];
   };
 
