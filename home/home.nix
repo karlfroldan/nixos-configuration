@@ -56,8 +56,6 @@
         libreoffice
         ghostty
         thunderbird
-
-        qgis
       ];
 
       commonCliApps =
@@ -86,6 +84,16 @@
           git-review
           quilt
           clang-tools
+
+          # Rust stuff
+          rust-analyzer
+          cargo
+          rustc
+          rustfmt
+          rustPackages.clippy
+
+          # C stuff
+          gcc
 
           global
           lftp
@@ -152,7 +160,7 @@
   home.file = {
     # bat (modern-cat) config file
     ".config/bat/config".text = ''
-      --theme="Coldark-Cold"
+      --theme="Coldark-Dark"
       --italic-text=always
     '';
     # # Building this configuration will create a copy of 'dotfiles/screenrc' in
@@ -251,8 +259,11 @@
             tree-sitter-javascript
             tree-sitter-cmake
             tree-sitter-elisp
+            tree-sitter-python
           ]
         ))
+
+        catppuccin-theme
 
         nix-mode
         eat
@@ -302,10 +313,8 @@
         cmake-mode
         rust-mode
         dockerfile-mode
-        pest-mode
-        typescript-mode
-        slint-mode
-        cypher-mode
+        python-mode
+        julia-mode
       ];
   };
 
