@@ -94,6 +94,7 @@
 
           # C stuff
           gcc
+          gnumake
 
           global
           lftp
