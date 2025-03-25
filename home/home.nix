@@ -51,6 +51,8 @@
       guiApps = with pkgs; [
         virt-manager
 
+        camunda-modeler
+
         gimp
         zotero
         libreoffice
