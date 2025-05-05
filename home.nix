@@ -1,7 +1,6 @@
 {
   config,
   pkgs,
-  nil,
   ...
 }@inputs:
 
@@ -10,6 +9,8 @@
   # manage.
   home.username = "karl";
   home.homeDirectory = "/home/karl";
+
+  news.display = "silent";
 
   # Enable experimental features
   nix = {
@@ -34,16 +35,13 @@
   home.packages =
     let
       securityApps = with pkgs; [
-        bitwarden-desktop
-        bitwarden-cli
         age
         minisign
-        wireguard-tools
       ];
 
       languageUtils = with pkgs; [
         # Nix language server
-        nil.packages.${system}.default
+        # nil.packages.${system}.default
         # Nix language formatter (invoke with nixfmt)
         nixfmt-rfc-style
       ];
@@ -51,11 +49,7 @@
       guiApps = with pkgs; [
         virt-manager
 
-        camunda-modeler
-
-        gimp
         zotero
-        libreoffice
         ghostty
         thunderbird
       ];
@@ -74,57 +68,27 @@
           htop # System view
           unzip
           bat
-          minicom
-
-          distrobox
-
-          pptp
-          ppp
-
-          python3
-          virtualenv
-          git-review
-          quilt
-          clang-tools
-
-          # Rust stuff
-          rust-analyzer
-          cargo
-          rustc
-          rustfmt
-          rustPackages.clippy
-
-          # C stuff
-          gcc
-          gnumake
 
           global
-          lftp
 
           emacsRestartScript
           texlive.combined.scheme-medium
         ];
 
-      gnomeApps = with pkgs; [
-        dconf-editor
-
-        gnome-online-accounts
-        loupe # Image viewer
-        bottles # Wine launcher
-      ];
-
       fonts = with pkgs; [
+        # pkgs.nerd-fonts.fira-code
+        # pkgs.nerd-fonts.inconsolata
         (nerdfonts.override {
           fonts = [
             "FiraCode"
             "Inconsolata"
           ];
         })
-        fira-code
+        # fira-code
         # noto-fonts
-        noto-fonts-cjk-sans
-        noto-fonts-cjk-serif
-        noto-fonts-emoji
+        # noto-fonts-cjk-sans
+        # noto-fonts-cjk-serif
+        # noto-fonts-emoji
 
         roboto
         roboto-serif
@@ -132,13 +96,6 @@
 
         emacs-all-the-icons-fonts
         libertine # For org-mode
-      ];
-
-      gnomeShellExtensions = with pkgs.gnomeExtensions; [
-        ideapad
-        dash-to-panel
-        blur-my-shell
-        arcmenu
       ];
 
       modernUnix = with pkgs; [
@@ -149,9 +106,7 @@
         doggo     # cmd line DNS
       ];
     in
-    gnomeApps
-    ++ gnomeShellExtensions
-    ++ securityApps
+    securityApps
     ++ commonCliApps
     ++ languageUtils
     ++ guiApps
@@ -216,30 +171,6 @@
     # want to use emacsclient instead.
   };
 
-  services.syncthing = {
-    enable = true;
-    tray.enable = true;
-    extraOptions = [
-      "--gui-address=http://127.0.0.1:8384"
-    ];
-  };
-
-  programs.bash = {
-    enable = true;
-  };
-  # programs.bash.enable = true;
-
-  programs.firefox = {
-    enable = true;
-    nativeMessagingHosts = [
-      pkgs.gnome-browser-connector
-    ];
-
-    policies = {
-      PasswordManagerEnabled = false;
-    };
-  };
-
   programs.emacs = {
     enable = true;
     package = pkgs.emacs30-gtk3;
@@ -280,7 +211,6 @@
         rg
         age # File encryption
         projectile
-        mu4e
         rich-minority
         annotate
         cdlatex
@@ -294,7 +224,6 @@
         helm-lsp # type completion alternative
         dap-mode # debugger
 
-        ggtags
         frog-jump-buffer
         maxima
         magit
@@ -321,70 +250,6 @@
       ];
   };
 
-  dconf = {
-    enable = true;
-    settings =
-      let
-        lib = inputs.lib;
-      in
-      {
-        "org/gnome/shell" = {
-
-          disable-user-extensions = false;
-          enabled-extensions = with pkgs.gnomeExtensions; [
-            # Put UUIDs of extensions that you want to enable here.
-            # If the extension you want to enable is packaged in nixpkgs,
-            # you can easily get its UUID by accessing its extensionUuid
-            # field (look at the following example).
-            ideapad.extensionUuid
-            dash-to-panel.extensionUuid
-            blur-my-shell.extensionUuid
-            arcmenu.extensionUuid
-          ];
-        };
-
-        # Configure individual extensions
-        "org/gnome/shell/extensions/blur-my-shell" = {
-          brightness = 0.75;
-          noise-amount = 0;
-        };
-
-        "org/gnome/shell/extensions/dash-to-panel" = {
-          dot-position = "BOTTOM";
-          dot-style-focused = "DASHES";
-          dot-style-unfocused = "DOTS";
-          hotkeys-overlay-combo = "TEMPORARILY";
-          leftbox-padding = -1;
-          window-preview-title-positions = "TOP";
-        };
-
-        "org/gnome/shell/extensions/arcmenu" = {
-          activate-on-hover = true;
-          custom-menu-button-icon-size = 30;
-          distro-icon = 22;
-
-          # Use Raven as my menu layout
-          menu-layout = "Raven";
-          raven-position = "Left";
-          raven-search-display-style = "List";
-
-          # Show world clocks when opening arcmenu
-          enable-clock-widget-raven = true;
-          enable-weather-widget-raven = true;
-
-          menu-arrow-rise = lib.hm.gvariant.mkTuple [
-            false
-            6
-          ];
-
-          # Use NixOS Icon for the button
-          menu-button-appearance = "Icon";
-          menu-button-icon = "Distro_Icon";
-        };
-      };
-
-  };
-
   programs.git = {
     enable = true;
     userName = "karlfroldan";
@@ -395,9 +260,9 @@
   # Let Home Manager install and manage itself.
   programs.home-manager.enable = true;
 
-  services.gpg-agent = {
-    enable = true;
-    pinentryPackage = pkgs.pinentry-qt;
-  };
+  # services.gpg-agent = {
+  #   enable = true;
+  #   pinentryPackage = pkgs.pinentry-qt;
+  # };
 
 }

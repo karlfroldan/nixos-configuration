@@ -1,58 +1,26 @@
 {
-  description = "Nix system configuration";
+  description = "Home Manager configuration using flakes";
 
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-24.11";
-    home-manager = {
-      url = "github:nix-community/home-manager/release-24.11";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
-
-    # Personal Nix packages
-    firekingpkgs.url = "github:karlfroldan/nixos-fireking/main";
-    # firekingpkgs.url = "git@github.com:karlfroldan/nixos-fireking.git";
-
-    # Nix language server protocol
-    nil = {
-      url = "github:oxalica/nil";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
+    home-manager.url = "github:nix-community/home-manager/release-24.11";
+    home-manager.inputs.nixpkgs.follows = "nixpkgs";
   };
 
-  outputs =
-    { self, nixpkgs, ... }@inputs:
+  outputs = { nixpkgs, home-manager, ... }:
     let
-      # Global Configuration about everything
-      globals = {
-        user = "karl";
-        fullName = "Karl Frederick Roldan";
-        gitName = "Karl Roldan";
-        gitEmail = "karlfroldan@gmail.com";
-      };
       system = "x86_64-linux";
-      firekingpkgs = inputs.firekingpkgs;
-    in
-    {
-      nixosConfigurations = {
-        fireking = import ./system/fireking/fireking.nix {
-          inherit inputs globals firekingpkgs;
-        };
+      username = "karl";
+      pkgs = import nixpkgs {
+        inherit system;
       };
+    in {
+      homeConfigurations.${username} = home-manager.lib.homeManagerConfiguration {
+        inherit pkgs;
 
-      homeConfigurations = {
-        karl = inputs.home-manager.lib.homeManagerConfiguration {
-          pkgs = nixpkgs.legacyPackages.${system};
-          modules = [
-            ./home/home.nix
-          ];
-          extraSpecialArgs =
-            let
-              nil = inputs.nil;
-            in
-            {
-              inherit nil;
-            };
-        };
+        modules = [
+          ./home.nix
+        ];
       };
     };
 }
