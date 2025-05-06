@@ -1,6 +1,8 @@
 {
   config,
   pkgs,
+  nil,
+  ghostty,
   ...
 }@inputs:
 
@@ -41,7 +43,7 @@
 
       languageUtils = with pkgs; [
         # Nix language server
-        # nil.packages.${system}.default
+        nil.packages.${system}.default
         # Nix language formatter (invoke with nixfmt)
         nixfmt-rfc-style
       ];
@@ -50,8 +52,9 @@
         virt-manager
 
         zotero
-        ghostty
         thunderbird
+
+        ghostty.packages.${system}.default
       ];
 
       commonCliApps =
@@ -84,7 +87,7 @@
             "Inconsolata"
           ];
         })
-        # fira-code
+        fira-code
         # noto-fonts
         # noto-fonts-cjk-sans
         # noto-fonts-cjk-serif
@@ -123,14 +126,6 @@
     '';
     # # Building this configuration will create a copy of 'dotfiles/screenrc' in
     # # the Nix store. Activating the configuration will then make '~/.screenrc' a
-    # # symlink to the Nix store copy.
-    # ".screenrc".source = dotfiles/screenrc;
-
-    # # You can also set the file content immediately.
-    # ".gradle/gradle.properties".text = ''
-    #   org.gradle.console=verbose
-    #   org.gradle.daemon.idletimeout=3600000
-    # '';
   };
 
   # Home Manager can also manage your environment variables through
@@ -220,9 +215,9 @@
         # LSP mode
         flycheck
         lsp-ui
-        company # Completion popusps
-        helm-lsp # type completion alternative
-        dap-mode # debugger
+        company    # Completion popusps
+        helm-lsp   # type completion alternative
+        dap-mode   # debugger
 
         frog-jump-buffer
         maxima
