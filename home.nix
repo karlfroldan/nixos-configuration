@@ -2,7 +2,7 @@
   config,
   pkgs,
   nil,
-  ghostty,
+  # ghostty,
   ...
 }@inputs:
 
@@ -54,7 +54,7 @@
         zotero
         thunderbird
 
-        ghostty.packages.${system}.default
+        # ghostty.packages.${system}.default
       ];
 
       commonCliApps =
