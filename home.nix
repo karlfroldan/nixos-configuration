@@ -75,18 +75,20 @@
           global
 
           emacsRestartScript
-          texlive.combined.scheme-medium
+          texlive.combined.scheme-full
         ];
 
       fonts = with pkgs; [
+        pkgs.nerd-fonts.fira-code
+        pkgs.nerd-fonts.inconsolata
         # pkgs.nerd-fonts.fira-code
         # pkgs.nerd-fonts.inconsolata
-        (nerdfonts.override {
-          fonts = [
-            "FiraCode"
-            "Inconsolata"
-          ];
-        })
+        # (nerdfonts.override {
+        #   fonts = [
+        #     "FiraCode"
+        #     "Inconsolata"
+        #   ];
+        # })
         fira-code
         # noto-fonts
         # noto-fonts-cjk-sans
@@ -211,6 +213,7 @@
         cdlatex
         yasnippet
         deft
+        conda
 
         # LSP mode
         flycheck
@@ -227,6 +230,7 @@
 
         buffer-env
 
+        org-ref
         org-roam
         org-roam-ui
         org-roam-bibtex
