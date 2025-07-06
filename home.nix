@@ -215,6 +215,11 @@
         deft
         conda
 
+        popup
+
+        helm
+        helm-bibtex
+
         # LSP mode
         flycheck
         lsp-ui
