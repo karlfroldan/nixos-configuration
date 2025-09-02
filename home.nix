@@ -217,9 +217,6 @@
 
         popup
 
-        helm
-        helm-bibtex
-
         # LSP mode
         flycheck
         lsp-ui
@@ -235,10 +232,12 @@
 
         buffer-env
 
-        org-ref
         org-roam
         org-roam-ui
         org-roam-bibtex
+
+        # lsp-mode for Haskell
+        lsp-haskell
 
         # Programming languages
         jinja2-mode
